@@ -12,17 +12,26 @@ jobs:
     env:
       API_TOKEN: ${{ secrets.API_TOKEN }}
       SSH_PRIVATE_KEY_ID: ${{ secrets.SSH_PRIVATE_KEY_ID }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       WORKFLOW_FILE: ${{ vars.WORKFLOW }} # workflows文件全名(如xxx.yml)或者workflow的name
       PRODUCT_ID: ${{ vars.PRODUCT_ID || 38 }}
       INSTANCE_DURATION: ${{ vars.INSTRANCE_DURATION || 2 }}
       OS_ID: ${{ vars.OS_ID || 10 }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: check env
+        run: |
+          [ -z $API_TOKEN ] && echo "API_TOKEN变量不存在" && exit 1
+          [ -z $SSH_PRIVATE_KEY ] && echo "SSH_PRIVATE_KEY变量不存在" && exit 1
+          [ -z $SSH_PRIVATE_KEY_ID ] && echo "SSH_PRIVATE_KEY_ID变量不存在" && exit 1
+          [ -z $WORKFLOW_FILE ] && echo "WORKFLOW_FILE变量不存在" && exit 1
+
       - name: 设置 SSH 私钥
         run: |
-          printf '%b\n' "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          printf '%b\n' "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
 
       - name: 检查 AliceInit 实例是否存在
@@ -191,6 +200,7 @@ jobs:
         run: |
           echo "触发 build-on-selfhosted.yml"
           branch="main"
+          
           curl -s -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
