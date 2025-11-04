@@ -6,7 +6,25 @@
 # Usage
 1. 把yml复制到对应仓库的.github/workflows 文件夹下
 2. 在你的要编译的仓库中添加secret和变量
-3. 修改对应workflow的run-on为self-hosted
+
+**最后修改对应workflow的run-on为如下格式**
+```
+on: 
+  workflow_dispatch:
+    inputs:
+      runner_choice:
+        type: choice
+        options: [self-hosted, ubuntu-24.04]
+        default: ubuntu-24.04
+
+jobs:
+  build:
+    runs-on: ${{ inputs.runner_choice == 'self-hosted'
+                 && 'self-hosted'
+                 || inputs.runner_choice }}
+    steps:
+        ..........
+```
 
 | secret名称          | 作用                                         | 是否必须 |
 |-------------------|--------------------------------------------|------|
