@@ -3,6 +3,7 @@
 
 # features
 - 支持一键注册runner
+
 # Usage
 1. 把yml复制到对应仓库的.github/workflows 文件夹下
 2. 在你的要编译的仓库中添加secret和变量
@@ -25,7 +26,10 @@ jobs:
     steps:
         ..........
 ```
+# 示例
+请见 https://github.com/TwoOnefour/E8820S-OpenWrt/blob/main/.github/workflows/e8820s-official-openwrt-23.05.yml
 
+# 变量作用
 | secret名称          | 作用                                         | 是否必须 |
 |-------------------|--------------------------------------------|------|
 | API_TOKEN         | alice evo的token,格式为 `client_id:client_secret` | 是    |
