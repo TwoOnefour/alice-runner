@@ -88,33 +88,6 @@ jobs:
             fi
           done
 
-#      - name: Reinstall the system
-#        run: |
-#              ip=${{ steps.get_ip.outputs.ip }}
-#              ssh -o StrictHostKeyChecking=no -i private_key.pem root@$ip << 'EOF'
-#               curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh || wget -O reinstall.sh $_
-#               bash reinstall.sh ubuntu 22.04 --ssh-key /root/.ssh/authorized_keys
-#               shutdown -r -t 5
-#              EOF
-#              echo "系统重装命令已发送，等待实例重启..."
-#              sleep 5m
-#
-#              # 等待 SSH 可用
-#              echo "Waiting for SSH on $ip..."
-#
-#              for i in {1..10}; do
-#                if ssh -o BatchMode=yes \
-#                       -o ConnectTimeout=5 \
-#                       -o StrictHostKeyChecking=no \
-#                       -i private_key.pem \
-#                       root@"$ip" "echo ready" &> /dev/null; then
-#                  echo "✅ SSH ready"
-#                  break
-#                else
-#                  echo "⏳ SSH not ready yet ($i/10)..."
-#                  sleep 5
-#                fi
-#              done
       - name: Build on Remote
         id: build
         run: |
