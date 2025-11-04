@@ -89,35 +89,6 @@ jobs:
           fi
         done
 
-#    - name: Reinstall the system
-#      run: |
-#        ip=${{ steps.get_ip.outputs.ip }}
-#        ssh -o StrictHostKeyChecking=no -i private_key.pem root@$ip << 'EOF'
-#          curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh || wget -O reinstall.sh $_
-#          bash reinstall.sh ubuntu 22.04 --ssh-key /root/.ssh/authorized_keys
-#          shutdown -r -t 5
-#        EOF
-#        echo "系统重装命令已发送，等待实例重启..."
-#        sleep 5m
-#        echo "Waiting for instance to respond"
-#        if [ ! -d "alice-runner" ]; then
-#        git clone "https://github.com/${{ github.repository }}"
-#        fi
-#        bash alice-runner/local_scripts/*.sh
-#        ip=${{ steps.get_ip.outputs.ip }}
-#        for i in {1..5}; do
-#        if ssh -o BatchMode=yes \
-#        -o ConnectTimeout=5 \
-#        -o StrictHostKeyChecking=no \
-#        -i private_key.pem \
-#        root@$ip exit; then
-#        echo "✅ Instance is ready!"
-#        break
-#        else
-#        echo "Waiting for instance... ($i/5)"
-#        sleep 5
-#        fi
-#        done
     - name: Build on Remote
       id: build
       run: |
@@ -125,11 +96,6 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i private_key.pem root@$ip << 'EOF'
           echo 127.0.0.1 $(hostname) >> /etc/hosts
           apt update && apt install -y curl tar xz-utils git jq unzip snapd
-          #git clone https://github.com/actions/runner-images && cd runner-images/images/ubuntu/scripts/build
-          #mv ../helpers/* /
-          #mv ../../toolsets/toolset-2204.json /toolset.json
-          #for file in *.sh; do chmod +x "$file";./"$file"||true;done
-          #cd ../../../../../
           [ ! -d "app" ] && git clone https://github.com/${{ vars.REPO }} app
           if [ ! -d "alice-runner" ]; then
           git clone "https://github.com/${{ github.repository }}"
