@@ -24,10 +24,11 @@ jobs:
 
       - name: check env
         run: |
-          [ -z $API_TOKEN ] && echo "API_TOKEN变量不存在" && exit 1
-          [ -z $SSH_PRIVATE_KEY ] && echo "SSH_PRIVATE_KEY变量不存在" && exit 1
-          [ -z $SSH_PRIVATE_KEY_ID ] && echo "SSH_PRIVATE_KEY_ID变量不存在" && exit 1
+          [ -z $API_TOKEN ] && echo "API_TOKEN密钥不存在" && exit 1
+          [ -z $SSH_PRIVATE_KEY ] && echo "SSH_PRIVATE_KEY密钥不存在" && exit 1
+          [ -z $SSH_PRIVATE_KEY_ID ] && echo "SSH_PRIVATE_KEY_ID密钥不存在" && exit 1
           [ -z $WORKFLOW_FILE ] && echo "WORKFLOW_FILE变量不存在" && exit 1
+          [ -z ${{ secrets.GH_TOKEN }} ] && echo "GH_TOKEN密钥不存在" && exit 1
 
       - name: 设置 SSH 私钥
         run: |
